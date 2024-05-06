@@ -1,0 +1,84 @@
+, exit_code -> void
+#std_exit%(
+    x60 $2
+;
+
+, size buff* -> void
+#std_write%(
+    x1 x1 $4 .
+;
+
+, size buff* -> size
+#std_read%(
+    x1 x0 $4
+;
+
+, void -> seconds_time
+#std_time%(
+    x0 x201 $2
+;
+
+, seconds_time -> void
+#std_delay%(
+    %std_time#
+    [y %std_time# - z z3 y z3 z > {
+        z
+    ;..
+;
+
+, int -> size buff*
+#std_itoa%(
+    y ! {
+        x1 m'itoa_buff'
+        p'itoa_buff' z x48 + sb
+        'itoa_buff' r
+    ;
+
+    yy x0 > {x0- ;
+     x0 z [ y {
+        x10 z/z.
+        zx1+z
+    ;.
+
+    zy x0 > {zx1+z; z
+
+    y m'itoa_buff'
+    x1 z - p'itoa_buff' +
+
+    zy x0 > {
+        p'itoa_buff' x45 sb
+        x0-
+    ;z
+
+    z [ y {
+        x10 z/z x'0'+
+        zz3yz3 sb z
+        zx1z-z
+    ;..
+
+    'itoa_buff'
+;
+
+, size buff* -> int error,
+#std_atoi%(
+    ylb x'-' = {z x1 z- z x1 + z x-1 z3]
+    ylb x'+' = {z x1 z- z x1 + z x1 z3]
+    z x1 z3;;
+
+    x0 z3z
+    z [ y x0 < {
+        x1 z-
+        z3 x10 * z3
+        z3 zy lb 
+
+        ,y x'9' < { ......x1 r;,
+        ,y x'0' > { ......x1 r;,
+        y x'9' < { ..z3.. x10 z /z. r;
+        y x'0' > { ..z3.. x10 z /z. r;
+        x'0'z-
+
+        zz3+z3
+        zx1+z
+    ;..
+    * ,x0,
+;

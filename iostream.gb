@@ -1,0 +1,54 @@
+, filename* -> fd error ,
+#io_open%(
+    x0 x0 z3  x2 $4
+    y x0 >
+;
+
+, fd -> error ,
+#io_close%( 
+    x3 $2
+    x0 >
+;
+
+, size buff* fd -> error ,
+#io_read%(
+    x0 $4
+    x0 > 
+;
+
+, filename* -> buff* error ,
+#io_stat%(
+    x1 m'io_buff'
+    p'io_buff'y z3 x4 $3 . 
+    yl x0 =
+;
+
+, filename* -> size error ,
+#io_size%(
+    %io_stat#
+    z x48 +l z
+;
+
+, filename* -> size buff* ,
+#io_read_file%(
+    z m'io_filename'
+    p'io_filename' z s
+
+    v'io_filename' %io_open#
+    { x1 r;
+    
+    x1 m'io_fd'
+    p'io_fd' z s
+    
+    v'io_filename' %io_size#
+    { x1 r;
+    
+    m'io_content'
+    'io_content' v'io_fd' %io_read#
+    { x1 r;
+    
+    v'io_fd' %io_close#
+    { x1 r;
+
+    'io_content'
+;

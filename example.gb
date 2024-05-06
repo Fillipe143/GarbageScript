@@ -1,0 +1,5 @@
+i"standard.gb"
+i"iostream.gb"
+
+x"example.gb" %io_read_file#
+%std_write#

@@ -1,0 +1,91 @@
+#std_exit%(
+    x60 $2
+;
+
+#std_write%(
+    m z s
+    x1 m x1 x1 $4
+;
+
+#std_read%(
+    x1 x0 $4
+;
+
+#std_print%(
+    x1 x1 $4
+;
+
+#std_println%(
+    %std_print#
+    x10 %std_write#
+;
+
+#std_time%(
+    x0 x201 $2
+    a
+;
+
+#std_delay%(
+    %std_time#
+    [y %std_time# - z z3 y z3 z > {
+        z
+    ;..
+;
+
+#std_itoa%(
+    y x10 > {
+        m z x48 + s
+        x1
+        m
+    ]
+        'itoa_n' z s
+        'itoa_s' x0  s
+
+        ['itoa_n'l x0 =! {
+            'itoa_n' 'itoa_n'l x10 z / zz3z s
+            'itoa_c' z x48 + s
+
+            m 'itoa_s'l + 'itoa_c'l s
+            'itoa_s' ylx1+s
+        ;
+        
+        'itoa_i' 'itoa_s'l s
+        ['itoa_i'l x0 < {
+            'itoa_i' yl x1z- s
+
+            'itoa_c' m 'itoa_i'l + ls
+            m 'itoa_i'l + x0 s
+            
+            x1 'itoa_i'l 'itoa_s'l--
+            m x32 + + 'itoa_c'l s
+        ;
+
+        'itoa_s'l
+        m x32 +
+    ;
+;
+
+#std_atoi%(
+    'atoi_str' z s
+    'atoi_s' z s
+    'atoi_n' x0 s
+    
+    'atoi_i' 'atoi_s'l s
+    'atoi_m' x1 s
+    ['atoi_i'l x0 < {
+        'atoi_i' yl x1z- s
+        'atoi_c' 'atoi_str'l 'atoi_i'l + l s
+        'atoi_str'l 'atoi_i'l + x0 s
+
+        'atoi_c'ly x48 > z x57 < | {
+            'atoi_c'l@
+            x1 %std_exit#
+        ;
+
+        'atoi_c' yl x48 z- 'atoi_m'l * s
+        'atoi_m' yl x10 * s
+        'atoi_n' yl 'atoi_c'l + s
+    ;
+
+    'atoi_n'l
+;
